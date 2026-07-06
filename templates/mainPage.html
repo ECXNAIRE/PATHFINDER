@@ -10,9 +10,12 @@
             font-family: "mainFont";
             src: url("../static/fonts/mainFont.ttf") format("truetype");
         }
+
         @font-face {
-            font-family: "logoFont";
-            src: url("../static/fonts/logoFont.ttf") format("truetype");
+            font-family: 'logoFont';
+            font-style: normal;
+            font-weight: 400;
+            src: url("../static/fonts/logoFont.ttf") format("woff2");
         }
 
         * {
@@ -42,7 +45,7 @@
             align-items: center;
             padding: 20px;
             box-sizing: border-box;
-            gap:20px;
+            gap: 20px;
         }
 
         #headerArea {
@@ -56,19 +59,98 @@
             align-items: center;
         }
 
-        #headerArea h1 {
-            font-family: logoFont;
-            font-size: 42px;
-            font-weight: 900px;
-            margin-left: 20px;
-        }
-
         #canvasArea {
-            width:98%;
+            width: 98%;
             height: 560px;
             border: 2px solid #2F2F2F;
             border-radius: 10px;
             background: #E8E1CF;
+        }
+
+        #logoArea {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+        }
+
+        #logoArea img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+
+
+        #controlArea {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        #controlArea button {
+            height: 42px;
+            padding: 0 18px;
+            border: 2px solid #2F2F2F;
+            border-radius: 10px;
+            background: #FAF8F4;
+            font-family: mainFont;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #controlArea button:hover,
+        #controlArea select:hover {
+            background: #F2EBD9;
+            transform: translateY(-2px);
+        }
+
+
+        #algorithDropdown {
+            position: relative;
+            width: 180px;
+            font-family: mainFont;
+            user-select: none;
+        }
+
+        #selectedAlgorithm {
+            height: 45px;
+            border: 2px solid #2F2F2F;
+            border-radius: 10px;
+            background: #FAF8F4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+
+
+        #algorithmOptions {
+            position: absolute;
+            width: 100%;
+            top: 52px;
+            border: 2px solid #2F2F2F;
+            border-radius: 10px;
+            background: #FAF8F4;
+            overflow: hidden;
+            display: none;
+        }
+
+        .option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .option:hover {
+            background: #E8E1CF;
+        }
+
+        #arrow {
+            transition: .2s;
         }
     </style>
 </head>
@@ -76,13 +158,86 @@
 <body>
     <div id="mainArea">
         <div id="headerArea">
-            <h1>PathFinder</h1>
+            <div id="logoArea">
+                <img src="../static/img/logo.png">
+            </div>
+
+            <div id="controlArea">
+                <button>WALL</button>
+                <button>START</button>
+                <button>END</button>
+                <button>ERASER</button>
+
+                <div id="algorithDropdown">
+                    <div id="selectedAlgorithm">
+                        BFS
+                        <span id="arrow">▼</span>
+                    </div>
+
+                    <div id="algorithmOptions">
+                        <div class="option">BFS</div>
+                        <div class="option">DFS</div>
+                        <div class="option">Dijkstra</div>
+                        <div class="option">A*</div>
+                    </div>
+                </div>
+
+                <button>SOLVE</button>
+                <button>CLEAR</button>
+
+            </div>
         </div>
 
         <div id="canvasArea">
             <canvas id="drawCanvas"></canvas>
         </div>
     </div>
+
+
+
+    <script>
+        const dropdown = document.getElementById("algorithmDropdown");
+        const selected = document.getElementById("selectedAlgorithm");
+        const options = document.getElementById("algorithmOptions");
+        const arrow = document.getElementById("arrow")
+
+
+        selected.addEventListener("click", () => {
+
+            if (options.style.display === "block") {
+                options.style.display = "none";
+                arrow.style.transform = "rotate(0deg)";
+            }
+            else {
+                options.style.display = "block";
+                arrow.style.transform = "rotate(180deg)";
+            }
+
+        });
+
+        document.querySelectorAll(".option").forEach(option => {
+
+            option.addEventListener("click", () => {
+
+                selected.childNodes[0].textContent = option.textContent + " ";
+
+                options.style.display = "none";
+                arrow.style.transform = "rotate(0deg)";
+
+            });
+
+        });
+
+        window.addEventListener("click", (e) => {
+
+            if (!dropdown.contains(e.target)) {
+                options.style.display = "none";
+                arrow.style.transform = "rotate(0deg)";
+            }
+
+        });
+
+    </script>
 
 </body>
 
