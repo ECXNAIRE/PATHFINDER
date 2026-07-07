@@ -113,11 +113,13 @@
         }
 
 
-        #algorithDropdown {
+        #algorithmDropdown {
             position: relative;
             width: 180px;
             font-family: mainFont;
             user-select: none;
+            z-index: 100;
+
         }
 
         #selectedAlgorithm {
@@ -142,6 +144,7 @@
             background: #FAF8F4;
             overflow: hidden;
             display: none;
+            z-index: 101;
         }
 
         .option {
@@ -191,15 +194,15 @@
             </div>
 
             <div id="controlArea">
-                <button class="toolBtn">WALL</button>
-                <button class="toolBtn">
+                <button class="toolBtn" data-tool="wall">WALL</button>
+                <button class="toolBtn" data-tool="start">
                     <img src="../static/img/greenDot.png" class="btnImg">START</button>
-                <button class="toolBtn">
+                <button class="toolBtn" data-tool="end">
                     <img src="../static/img/redDot.png" class="btnImg">END</button>
-                <button class="toolBtn">
+                <button class="toolBtn" data-tool="eraser">
                     <img src="../static/img/eraser.png" class="btnImg">ERASER</button>
 
-                <div id="algorithDropdown">
+                <div id="algorithmDropdown">
                     <div id="selectedAlgorithm">
                         BFS
                         <span id="arrow">▼</span>
@@ -234,22 +237,12 @@
         const selected = document.getElementById("selectedAlgorithm");
         const options = document.getElementById("algorithmOptions");
         const arrow = document.getElementById("arrow")
-        const toolBtn = document.querySelectorAll(".toolBtn")
 
 
-        toolBtn.forEach(button => {
-            button.addEventListener("click", () => {
-                toolBtn.forEach(btn => {
-                    btn.classList.remove("selectedTool")
-                })
 
-                button.classList.add("selectedTool")
-            })
-        })
+        selected.addEventListener("click", (e) => {
 
-
-        selected.addEventListener("click", () => {
-
+            e.stopPropagation();
             if (options.style.display === "block") {
                 options.style.display = "none";
                 arrow.style.transform = "rotate(0deg)";
@@ -263,7 +256,8 @@
 
         document.querySelectorAll(".option").forEach(option => {
 
-            option.addEventListener("click", () => {
+            option.addEventListener("click", (e) => {
+                e.stopPropagation();
 
                 selected.childNodes[0].textContent = option.textContent + " ";
 
