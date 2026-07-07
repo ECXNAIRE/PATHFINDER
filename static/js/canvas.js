@@ -5,6 +5,8 @@ let selectedTool = null
 let startCell = null;
 let endCell = null;
 
+let isMouseDown = false
+
 toolBtn.forEach(button => {
     button.addEventListener("click", () => {
         toolBtn.forEach(btn => {
@@ -100,6 +102,54 @@ canvas.addEventListener("click", (event) => {
     const column = Math.floor(mouseX / cellSize)
     const row = Math.floor(mouseY / cellSize)
 
+    painCell(row, column)
+
+})
+
+
+// CLEAR BTN HERE 
+document.getElementById("clearBtn").addEventListener("click", () => {
+    for (let row = 0; row < ROWS; row++) {
+        for (let column = 0; column < COLUMNS; column++) {
+            grid[row][column].type = "empty"
+        }
+    }
+
+    startCell = null;
+    endCell = null
+
+    drawGrid()
+})
+
+
+canvas.addEventListener("mousedown", () => {
+    isMouseDown = true
+})
+
+window.addEventListener("mouseup", () => {
+    isMouseDown = false
+})
+
+canvas.addEventListener("mousemove", () => {
+    if (!isMouseDown) return
+
+    if (!selectedTool === "wall" || !selectedTool === "eraser") return
+
+    const rect = canvas.getBoundingClientRect();
+
+    const mouseX = event.clientX - rect.left
+    const mouseY = event.clientY - rect.top;
+
+    const column = Math.floor(mouseX / cellSize)
+    const row = Math.floor(mouseY / cellSize)
+
+    painCell(row, column)
+
+})
+
+
+
+function painCell(row, column) {
     if (
         row < 0 || row >= ROWS ||
         column < 0 || column >= COLUMNS
@@ -109,7 +159,7 @@ canvas.addEventListener("click", (event) => {
 
     console.log(row, column, grid[row][column].type)
 
-    grid[row][column].type = selectedTool
+
 
     if (selectedTool === "eraser") {
         grid[row][column].type = "empty"
@@ -125,26 +175,20 @@ canvas.addEventListener("click", (event) => {
 
     } else if (selectedTool === "end") {
         if (endCell !== null) {
-            startCell.type = "empty"
+            endCell.type = "empty"
         }
         grid[row][column].type = "end"
         endCell = grid[row][column]
 
-    } else {
+    } else if (
+        selectedTool === "wall" &&
+        (grid[row][column].type === "start" || grid[row][column].type === "end")
+    ) {
+        return;
+    }
+    else {
         grid[row][column].type = selectedTool
     }
 
     drawGrid()
-})
-
-
-// CLEAR BTN HERE 
-document.getElementById("clearBtn").addEventListener("click", () => {
-    for (let row = 0; row < ROWS; row++) {
-        for (let column = 0; column < COLUMNS; column++) {
-            grid[row][column].type = "empty"
-        }
-    }
-
-    drawGrid()
-})
+}
