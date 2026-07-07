@@ -2,7 +2,8 @@ const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
 const toolBtn = document.querySelectorAll(".toolBtn")
 let selectedTool = null
-
+let startCell = null;
+let endCell = null;
 
 toolBtn.forEach(button => {
     button.addEventListener("click", () => {
@@ -25,7 +26,7 @@ canvas.height = Math.floor(canvasArea.clientHeight / cellSize) * cellSize;
 const ROWS = canvas.height / cellSize;
 const COLUMNS = canvas.width / cellSize;
 
-console.log(ROWS, COLUMNS)
+console.log(ROWS, COLUMNS,)
 
 
 
@@ -96,15 +97,39 @@ canvas.addEventListener("click", (event) => {
     const mouseX = event.clientX - rect.left
     const mouseY = event.clientY - rect.top;
 
-    const column = Math.floor(mouseX/ cellSize)
+    const column = Math.floor(mouseX / cellSize)
     const row = Math.floor(mouseY / cellSize)
 
-    console.log(row, column)
+    if (
+        row < 0 || row >= ROWS ||
+        column < 0 || column >= COLUMNS
+    ) return
+
+
+
+    console.log(row, column, grid[row][column].type)
 
     grid[row][column].type = selectedTool
 
-    if(selectedTool === "eraser") {
+    if (selectedTool === "eraser") {
         grid[row][column].type = "empty"
+
+
+    } else if (selectedTool === "start") {
+        if (startCell !== null) {
+            startCell.type = "empty"
+        }
+        grid[row][column].type = "start"
+        startCell = grid[row][column]
+
+
+    } else if (selectedTool === "end") {
+        if (endCell !== null) {
+            startCell.type = "empty"
+        }
+        grid[row][column].type = "end"
+        endCell = grid[row][column]
+
     } else {
         grid[row][column].type = selectedTool
     }
@@ -112,3 +137,14 @@ canvas.addEventListener("click", (event) => {
     drawGrid()
 })
 
+
+// CLEAR BTN HERE 
+document.getElementById("clearBtn").addEventListener("click", () => {
+    for (let row = 0; row < ROWS; row++) {
+        for (let column = 0; column < COLUMNS; column++) {
+            grid[row][column].type = "empty"
+        }
+    }
+
+    drawGrid()
+})
