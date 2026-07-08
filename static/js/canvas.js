@@ -1,4 +1,5 @@
 import { breadthFirstSearch } from "./algorithms/bfs.js";
+import { depthFirstSearch } from "./algorithms/dfs.js";
 const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
 const toolBtn = document.querySelectorAll(".toolBtn")
@@ -89,11 +90,11 @@ function drawCell(cell) {
             break;
 
         case "start":
-            ctx.fillStyle = "#59C36A";
+            ctx.fillStyle = "#3a8847";
             break;
 
         case "end":
-            ctx.fillStyle = "#E25757";
+            ctx.fillStyle = "#b13d3d";
             break;
 
         case "visited":
@@ -276,6 +277,10 @@ sovleBtn.addEventListener("click", () => {
         case "BFS":
             result = breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
             animate(result.visitedOrder, result.path)
+
+        case "DFS":
+            result = depthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
+            animate(result.visitedOrder, result.path)
     }
 
 
@@ -300,6 +305,11 @@ function animate(visitedOrder, path) {
     }
 
     setTimeout(() => {
+
+        if (!result.found) {
+            alert("No Path Found!");
+            return;
+        }
 
         for (let i = 0; i < path.length; i++) {
 

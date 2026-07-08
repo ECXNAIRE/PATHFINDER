@@ -1,24 +1,25 @@
-import { resetSearch, getNeighbours } from "../helper.js"
+import { resetSearch, getNeighbours } from "../helper.js";
 
-export function breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS) {
-    resetSearch(grid, ROWS, COLUMNS);
+export function depthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS) {
+    resetSearch(grid, ROWS, COLUMNS)
 
     const visitedOrder = []
-    const queue = []
+    const stack = []
     const path = []
     let found = false
 
-    startCell.visited = true
-    queue.push(startCell)
 
-    while (queue.length > 0) {
-        const current = queue.shift()
+    startCell.visited = true
+    stack.push(startCell)
+
+    while (stack.length > 0) {
+        const current = stack.pop()
 
         visitedOrder.push(current)
 
         if (current === endCell) {
             found = true
-            break;
+            break
         }
 
         const neighbours = getNeighbours(current, grid, ROWS, COLUMNS)
@@ -29,14 +30,13 @@ export function breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS) {
             neighbour.visited = true
             neighbour.previous = current
 
-            queue.push(neighbour)
+            stack.push(neighbour)
         }
     }
 
+
     if (found) {
-
         let current = endCell
-
         while (current !== null) {
             path.push(current)
             current = current.previous
@@ -46,13 +46,9 @@ export function breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS) {
     }
 
 
-
-
     return {
         visitedOrder,
         path,
         found
     }
-
-
 }
