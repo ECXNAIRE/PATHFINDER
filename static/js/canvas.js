@@ -11,6 +11,7 @@ const arrow = document.getElementById("arrow")
 const sovleBtn = document.getElementById("solve");
 let result
 let canClick = true
+let boardCleared = true
 
 let selectedAlgorithm = "BFS"
 
@@ -96,11 +97,11 @@ function drawCell(cell) {
             break;
 
         case "visited":
-            ctx.fillStyle = "#d86dff";
+            ctx.fillStyle = "#8E7DBE";
             break;
 
         case "path":
-            ctx.fillStyle = "#FFD54A";
+            ctx.fillStyle = "#D4A64A";
             break;
     }
 
@@ -126,6 +127,8 @@ document.getElementById("clearBtn").addEventListener("click", () => {
     startCell = null;
     endCell = null
 
+    boardCleared = true
+
 
     drawGrid()
 })
@@ -133,7 +136,7 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 
 canvas.addEventListener("mousedown", () => {
 
-    if (!canClick) return
+    if (!boardCleared) return
 
 
     const rect = canvas.getBoundingClientRect();
@@ -268,6 +271,7 @@ sovleBtn.addEventListener("click", () => {
 
 
     canClick = false
+    boardCleared = false
     switch (selectedAlgorithm) {
         case "BFS":
             result = breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
@@ -301,7 +305,7 @@ function animate(visitedOrder, path) {
 
             setTimeout(() => {
 
-                if (path[i] !== startCell || path[i] !== endCell) {
+                if (path[i] !== startCell && path[i] !== endCell) {
                     path[i].type = "path";
                 }
 
