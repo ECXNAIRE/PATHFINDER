@@ -10,6 +10,7 @@ const options = document.getElementById("algorithmOptions");
 const arrow = document.getElementById("arrow")
 const sovleBtn = document.getElementById("solve");
 let result
+let canClick = true
 
 let selectedAlgorithm = "BFS"
 
@@ -97,6 +98,10 @@ function drawCell(cell) {
         case "visited":
             ctx.fillStyle = "#d86dff";
             break;
+
+        case "path":
+            ctx.fillStyle = "#FFD54A";
+            break;
     }
 
 
@@ -110,6 +115,8 @@ drawGrid()
 
 // CLEAR BTN HERE 
 document.getElementById("clearBtn").addEventListener("click", () => {
+
+    if (!canClick) return
     for (let row = 0; row < ROWS; row++) {
         for (let column = 0; column < COLUMNS; column++) {
             grid[row][column].type = "empty"
@@ -119,11 +126,14 @@ document.getElementById("clearBtn").addEventListener("click", () => {
     startCell = null;
     endCell = null
 
+
     drawGrid()
 })
 
 
 canvas.addEventListener("mousedown", () => {
+
+    if (!canClick) return
 
 
     const rect = canvas.getBoundingClientRect();
@@ -255,6 +265,9 @@ sovleBtn.addEventListener("click", () => {
         alert("Place both Start and End nodes!");
         return
     }
+
+
+    canClick = false
     switch (selectedAlgorithm) {
         case "BFS":
             result = breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
@@ -271,6 +284,7 @@ sovleBtn.addEventListener("click", () => {
 function animate(visitedOrder, path) {
     for (let i = 0; i < visitedOrder.length; i++) {
         setTimeout(() => {
+
             const cell = visitedOrder[i];
 
             if (cell !== startCell && cell !== endCell) {
@@ -280,4 +294,27 @@ function animate(visitedOrder, path) {
             drawGrid();
         }, i * 20)
     }
+
+    setTimeout(() => {
+
+        for (let i = 0; i < path.length; i++) {
+
+            setTimeout(() => {
+
+                if (path[i] !== startCell || path[i] !== endCell) {
+                    path[i].type = "path";
+                }
+
+                drawGrid();
+
+            }, i * 40);
+
+        }
+
+    }, visitedOrder.length * 20);
+
+
+    setTimeout(() => {
+        canClick = true;
+    }, visitedOrder.length * 20);
 }
