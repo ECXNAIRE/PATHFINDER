@@ -9,6 +9,7 @@ const selected = document.getElementById("selectedAlgorithm");
 const options = document.getElementById("algorithmOptions");
 const arrow = document.getElementById("arrow")
 const sovleBtn = document.getElementById("solve");
+let result
 
 let selectedAlgorithm = "BFS"
 
@@ -93,6 +94,9 @@ function drawCell(cell) {
             ctx.fillStyle = "#E25757";
             break;
 
+        case "visited":
+            ctx.fillStyle = "#d86dff";
+            break;
     }
 
 
@@ -247,15 +251,33 @@ window.addEventListener("click", (e) => {
 
 sovleBtn.addEventListener("click", () => {
 
-    if(!startCell || ! endCell) {
+    if (!startCell || !endCell) {
         alert("Place both Start and End nodes!");
         return
     }
-    switch(selectedAlgorithm) {
+    switch (selectedAlgorithm) {
         case "BFS":
-            breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
+            result = breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
+            animate(result.visitedOrder, result.path)
     }
 
 
 })
 
+
+
+//ANIMTING FUNNTION
+
+function animate(visitedOrder, path) {
+    for (let i = 0; i < visitedOrder.length; i++) {
+        setTimeout(() => {
+            const cell = visitedOrder[i];
+
+            if (cell !== startCell && cell !== endCell) {
+                cell.type = "visited";
+            }
+
+            drawGrid();
+        }, i * 20)
+    }
+}
