@@ -217,7 +217,7 @@
                     </div>
                 </div>
 
-                <button >
+                <button id="solve">
                     <img src="../static/img/play.png" class="btnImg">SOLVE</button>
                 <button id="clearBtn">
                     <img src="../static/img/replay.png" class="btnImg">CLEAR</button>
@@ -231,53 +231,10 @@
     </div>
 
 
-    <script src="../static/js/canvas.js"></script>
+    <script type="module" src="../static/js/canvas.js"></script>
 
     <script>
-        const dropdown = document.getElementById("algorithmDropdown");
-        const selected = document.getElementById("selectedAlgorithm");
-        const options = document.getElementById("algorithmOptions");
-        const arrow = document.getElementById("arrow")
-
-
-
-        selected.addEventListener("click", (e) => {
-
-            e.stopPropagation();
-            if (options.style.display === "block") {
-                options.style.display = "none";
-                arrow.style.transform = "rotate(0deg)";
-            }
-            else {
-                options.style.display = "block";
-                arrow.style.transform = "rotate(180deg)";
-            }
-
-        });
-
-        document.querySelectorAll(".option").forEach(option => {
-
-            option.addEventListener("click", (e) => {
-                e.stopPropagation();
-
-                selected.childNodes[0].textContent = option.textContent + " ";
-
-                options.style.display = "none";
-                arrow.style.transform = "rotate(0deg)";
-
-            });
-
-        });
-
-        window.addEventListener("click", (e) => {
-
-            if (!dropdown.contains(e.target)) {
-                options.style.display = "none";
-                arrow.style.transform = "rotate(0deg)";
-            }
-
-        });
-
+       
     </script>
 
 </body>

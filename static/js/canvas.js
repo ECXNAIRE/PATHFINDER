@@ -1,11 +1,20 @@
+import { breadthFirstSearch } from "./algorithms/bfs.js";
 const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
 const toolBtn = document.querySelectorAll(".toolBtn")
 let selectedTool = null
 let startCell = null;
+const dropdown = document.getElementById("algorithmDropdown");
+const selected = document.getElementById("selectedAlgorithm");
+const options = document.getElementById("algorithmOptions");
+const arrow = document.getElementById("arrow")
+const sovleBtn = document.getElementById("solve");
+
+let selectedAlgorithm = "BFS"
+
 let endCell = null;
 
-let isMouseDown = false
+let isMouseDown = false;
 
 toolBtn.forEach(button => {
     button.addEventListener("click", () => {
@@ -41,7 +50,10 @@ for (let row = 0; row < ROWS; row++) {
         grid[row][column] = {
             row: row,
             column: column,
-            type: "empty"
+            type: "empty",
+            visited: false,
+            previos: null,
+            distance: Infinity
         }
     }
 }
@@ -92,21 +104,6 @@ function drawCell(cell) {
 drawGrid()
 
 
-
-canvas.addEventListener("click", (event) => {
-    const rect = canvas.getBoundingClientRect();
-
-    const mouseX = event.clientX - rect.left
-    const mouseY = event.clientY - rect.top;
-
-    const column = Math.floor(mouseX / cellSize)
-    const row = Math.floor(mouseY / cellSize)
-
-    painCell(row, column)
-
-})
-
-
 // CLEAR BTN HERE 
 document.getElementById("clearBtn").addEventListener("click", () => {
     for (let row = 0; row < ROWS; row++) {
@@ -123,6 +120,13 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 
 
 canvas.addEventListener("mousedown", () => {
+
+
+    const rect = canvas.getBoundingClientRect();
+    const column = Math.floor((event.clientX - rect.left) / cellSize);
+    const row = Math.floor((event.clientY - rect.top) / cellSize);
+
+    paintCell(row, column);
     isMouseDown = true
 })
 
@@ -130,10 +134,10 @@ window.addEventListener("mouseup", () => {
     isMouseDown = false
 })
 
-canvas.addEventListener("mousemove", () => {
+canvas.addEventListener("mousemove", (event) => {
     if (!isMouseDown) return
 
-    if (!selectedTool === "wall" || !selectedTool === "eraser") return
+    if (selectedTool !== "wall" && selectedTool !== "eraser") return
 
     const rect = canvas.getBoundingClientRect();
 
@@ -143,13 +147,13 @@ canvas.addEventListener("mousemove", () => {
     const column = Math.floor(mouseX / cellSize)
     const row = Math.floor(mouseY / cellSize)
 
-    painCell(row, column)
+    paintCell(row, column)
 
 })
 
 
 
-function painCell(row, column) {
+function paintCell(row, column) {
     if (
         row < 0 || row >= ROWS ||
         column < 0 || column >= COLUMNS
@@ -192,3 +196,66 @@ function painCell(row, column) {
 
     drawGrid()
 }
+
+
+
+
+
+
+//DROPDOWN HANDLER 
+
+selected.addEventListener("click", (e) => {
+
+    e.stopPropagation();
+    if (options.style.display === "block") {
+        options.style.display = "none";
+        arrow.style.transform = "rotate(0deg)";
+    }
+    else {
+        options.style.display = "block";
+        arrow.style.transform = "rotate(180deg)";
+    }
+
+});
+
+document.querySelectorAll(".option").forEach(option => {
+
+    option.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        selectedAlgorithm = option.textContent
+
+        selected.childNodes[0].textContent = option.textContent + " ";
+
+        options.style.display = "none";
+        arrow.style.transform = "rotate(0deg)";
+
+    });
+
+});
+
+window.addEventListener("click", (e) => {
+
+    if (!dropdown.contains(e.target)) {
+        options.style.display = "none";
+        arrow.style.transform = "rotate(0deg)";
+    }
+
+});
+
+
+
+sovleBtn.addEventListener("click", () => {
+
+    if(!startCell || ! endCell) {
+        alert("Place both Start and End nodes!");
+        return
+    }
+    switch(selectedAlgorithm) {
+        case "BFS":
+            breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
+    }
+
+
+})
+
