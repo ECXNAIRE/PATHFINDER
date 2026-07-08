@@ -270,17 +270,21 @@ sovleBtn.addEventListener("click", () => {
         return
     }
 
+    if (!boardCleared) return
+
 
     canClick = false
     boardCleared = false
     switch (selectedAlgorithm) {
         case "BFS":
             result = breadthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
-            animate(result.visitedOrder, result.path)
+            animate(result.visitedOrder, result.path);
+            break;
 
         case "DFS":
             result = depthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
-            animate(result.visitedOrder, result.path)
+            animate(result.visitedOrder, result.path);
+            break;
     }
 
 
