@@ -1,5 +1,6 @@
 import { breadthFirstSearch } from "./algorithms/bfs.js";
 import { depthFirstSearch } from "./algorithms/dfs.js";
+import { disjkstra } from "./algorithms/dijkstra.js";
 const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
 const toolBtn = document.querySelectorAll(".toolBtn")
@@ -284,6 +285,12 @@ sovleBtn.addEventListener("click", () => {
         case "DFS":
             result = depthFirstSearch(startCell, endCell, grid, ROWS, COLUMNS)
             animate(result.visitedOrder, result.path);
+            break;
+
+
+        case "Dijkstra":
+            result = disjkstra(startCell, endCell, grid, ROWS, COLUMNS)
+            animate(result.visitedOrder, result.path)
             break;
     }
 
