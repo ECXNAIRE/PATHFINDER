@@ -47,7 +47,7 @@ export function disjkstra(startCell, endCell, grid, ROWS, COLUMNS) {
 
             if (neighbour.visited) continue;
 
-            const newDistance = current.distance + 1;
+            const newDistance = current.distance + neighbour.weight;
 
             if (newDistance < neighbour.distance) {
                 neighbour.distance = newDistance;

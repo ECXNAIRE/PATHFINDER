@@ -37,7 +37,7 @@ export function astar(startCell, endCell, grid, ROWS, COLUMNS) {
             if (neighbour.visited) continue
 
 
-            const newG = current.g + 1
+            const newG = current.g + neighbour.weight
 
             if (newG < neighbour.g) {
                 neighbour.g = newG;

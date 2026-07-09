@@ -12,14 +12,13 @@ const selected = document.getElementById("selectedAlgorithm");
 const options = document.getElementById("algorithmOptions");
 const arrow = document.getElementById("arrow")
 const sovleBtn = document.getElementById("solve");
+
+
 let result
 let canClick = true
 let boardCleared = true
-
 let selectedAlgorithm = "BFS"
-
 let endCell = null;
-
 let isMouseDown = false;
 
 toolBtn.forEach(button => {
@@ -31,7 +30,6 @@ toolBtn.forEach(button => {
         button.classList.add("selectedTool")
 
         selectedTool = button.dataset.tool
-        console.log(selectedTool)
     })
 })
 const canvasArea = document.getElementById("canvasArea");
@@ -57,6 +55,7 @@ for (let row = 0; row < ROWS; row++) {
             row: row,
             column: column,
             type: "empty",
+            weight: 1,
             visited: false,
             previos: null,
             distance: Infinity,
@@ -109,6 +108,11 @@ function drawCell(cell) {
         case "path":
             ctx.fillStyle = "#D4A64A";
             break;
+
+        case "weight":
+            ctx.fillStyle = "#A67C52";
+            break;
+
     }
 
 
@@ -212,6 +216,11 @@ function paintCell(row, column) {
         (grid[row][column].type === "start" || grid[row][column].type === "end")
     ) {
         return;
+    } else if (
+        selectedTool === "weight"
+    ) {
+        grid[row][column].weight = 5
+        grid[row][column].type = "weight"
     }
     else {
         grid[row][column].type = selectedTool
