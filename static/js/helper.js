@@ -3,6 +3,10 @@ export function resetSearch(grid, ROWS, COLUMNS) {
         for (let col = 0; col < COLUMNS; col++) {
             grid[row][col].visited = false
             grid[row][col].previous = null
+            grid[row][col].distance = Infinity
+            grid[row][col].g = Infinity
+            grid[row][col].h = 0
+            grid[row][col].f = Infinity
         }
     }
 }

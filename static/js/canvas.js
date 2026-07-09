@@ -1,3 +1,4 @@
+import { astar } from "./algorithms/astar.js";
 import { breadthFirstSearch } from "./algorithms/bfs.js";
 import { depthFirstSearch } from "./algorithms/dfs.js";
 import { disjkstra } from "./algorithms/dijkstra.js";
@@ -58,7 +59,10 @@ for (let row = 0; row < ROWS; row++) {
             type: "empty",
             visited: false,
             previos: null,
-            distance: Infinity
+            distance: Infinity,
+            g: Infinity,
+            h: 0,
+            f: Infinity
         }
     }
 }
@@ -292,6 +296,12 @@ sovleBtn.addEventListener("click", () => {
             result = disjkstra(startCell, endCell, grid, ROWS, COLUMNS)
             animate(result.visitedOrder, result.path)
             break;
+
+        case "A*":
+            result = astar(startCell, endCell, grid, ROWS, COLUMNS)
+            animate(result.visitedOrder, result.path)
+            break;
+
     }
 
 
